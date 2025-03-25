@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { Aluno } from '../models/Aluno';
 
+
+
 export const listarAlunos = async (req: Request, res: Response) => {
     const alunos = await Aluno.findAll();
     res.status(200).json(alunos);
