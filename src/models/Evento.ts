@@ -1,12 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
 
-export class Disciplina extends Model {
+export class Evento extends Model {
     public id!: number;
     public nome!: string;
 }
 
-Disciplina.init(
+Evento.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -20,7 +20,7 @@ Disciplina.init(
     },
     {
         sequelize,
-        tableName: "disciplinas",
+        tableName: "eventos",
         timestamps: true,
         paranoid: true,
 

@@ -11,14 +11,21 @@ router.get('/ping', ApiController.ping);
 
 router.get('/listarTodosAlunos', AlunoController.listarAlunos);
 router.post('/cadastrarAluno', AlunoController.cadastrarAluno);
+router.put('atualizarAluno/:alunoId', AlunoController.atualizarAluno);
+router.delete('/deletarAluno/:alunoId', AlunoController.deletarAluno);
+router.get('/listarTodosAlunosDeletados', AlunoController.listarAlunosDeletados);
+router.put('/recuperarAluno/:alunoId', AlunoController.recuperarAluno);
 
-router.get('/listarTodosDisciplinas', DisciplinaController.listarDisciplinas);
+router.get('/listarTodasDisciplinas', DisciplinaController.listarDisciplinas);
 router.post('/cadastrarDisciplina', DisciplinaController.cadastrarDisciplina);
+router.put('/atualizarDisciplina/:disciplinaId', DisciplinaController.atualizarDisciplina);
+router.delete('/deletarDisciplina/:disciplinaId', DisciplinaController.deletarDisciplina);
+
 
 router.get('/listarDisciplinaDoAluno/:alunoId', AlunoDisciplinaController.listarDisciplinaDoAluno);
 router.post('/vincularDisciplinasDoAluno', AlunoDisciplinaController.vincularDisciplinasDoAluno);
 
-router
+
 
 
 export default router;
