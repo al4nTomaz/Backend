@@ -15,11 +15,13 @@ router.put('atualizarAluno/:alunoId', AlunoController.atualizarAluno);
 router.delete('/deletarAluno/:alunoId', AlunoController.deletarAluno);
 router.get('/listarTodosAlunosDeletados', AlunoController.listarAlunosDeletados);
 router.put('/recuperarAluno/:alunoId', AlunoController.recuperarAluno);
+router.get('/buscarAluno/:alunoId', AlunoController.buscarAluno);
 
 router.get('/listarTodasDisciplinas', DisciplinaController.listarDisciplinas);
 router.post('/cadastrarDisciplina', DisciplinaController.cadastrarDisciplina);
 router.put('/atualizarDisciplina/:disciplinaId', DisciplinaController.atualizarDisciplina);
 router.delete('/deletarDisciplina/:disciplinaId', DisciplinaController.deletarDisciplina);
+router.get('/buscarDisciplina/:disciplinaId', DisciplinaController.buscarDisciplina);
 
 
 router.get('/listarDisciplinaDoAluno/:alunoId', AlunoDisciplinaController.listarDisciplinaDoAluno);

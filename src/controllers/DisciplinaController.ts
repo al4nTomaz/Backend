@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Disciplina } from '../models/Disciplina';
 import { Op } from 'sequelize';
+import { AlunoDisciplina } from '../models/AlunoDisciplina';
 
 export const listarDisciplinas = async (req: Request, res: Response) => {
     const disciplinas = await Disciplina.findAll();
@@ -23,6 +24,23 @@ export const cadastrarDisciplina = async (req: Request, res: Response) => {
         }
     }
     res.status(400).json({ error: "Nome da disciplina não enviado." });
+}
+
+export const buscarDisciplina = async (req: Request, res: Response) => {
+
+    try {
+        const { disciplinaId } = req.params;
+        
+        const disciplina = await Disciplina.findByPk(disciplinaId);
+        if (!disciplina) {
+            res.status(404).json({ error: 'Disciplina não encontrado' });    
+        }
+
+        res.status(200).json(disciplina);
+    } catch (error) {
+        console.error('Deu erro ai tio', error);
+        res.status(400).json({ error: 'Internal server error' });
+    }
 }
 
 export const atualizarDisciplina = async (req: Request, res: Response) => {
@@ -48,15 +66,17 @@ export const deletarDisciplina = async (req: Request, res: Response) => {
 
     try {
         const { disciplinaId } = req.params;
-        const dadosAtualizados = req.body;
         
         const disciplina = await Disciplina.findByPk(disciplinaId);
         if (!disciplina) {
             res.status(404).json({ error: 'Disciplina não encontrado' });    
         }
-        await disciplina?.destroy();
+        const alunoDisciplina = await AlunoDisciplina.findOne({where: {disciplinaId: disciplinaId}});
+        if (!alunoDisciplina) {
+            await disciplina?.destroy();
+        }
 
-        res.status(200).json(disciplina);
+        res.status(400).json({ error: 'Disciplina não pode ser excluido, há alunos cadastrados' });
     } catch (error) {
         console.error('Deu erro ai tio', error);
         res.status(400).json({ error: 'Internal server error' });

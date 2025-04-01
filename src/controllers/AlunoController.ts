@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Aluno } from '../models/Aluno';
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
+import { AlunoDisciplina } from '../models/AlunoDisciplina';
 
 
 export const listarAlunos = async (req: Request, res: Response) => {
@@ -16,6 +17,23 @@ export const cadastrarAluno = async (req: Request, res: Response) => {
         message: "Aluno cadastrado com sucesso", 
         novoAluno
     });
+}
+
+export const buscarAluno = async (req: Request, res: Response) => {
+
+    try {
+        const { alunoId } = req.params;
+        
+        const aluno = await Aluno.findByPk(alunoId);
+        if (!aluno) {
+            res.status(404).json({ error: 'Aluno não encontrado' });    
+        }
+
+        res.status(200).json(aluno);
+    } catch (error) {
+        console.error('Deu erro ai tio', error);
+        res.status(400).json({ error: 'Internal server error' });
+    }
 }
 
 export const atualizarAluno = async (req: Request, res: Response) => {
@@ -46,9 +64,21 @@ export const deletarAluno = async (req: Request, res: Response) => {
         if (!aluno) {
             res.status(404).json({ error: 'Aluno não encontrado' });    
         }
-        await aluno?.destroy();
+        const alunoDisciplina = await AlunoDisciplina.findOne({where: {alunoId: alunoId}});
+        if (!alunoDisciplina) {
+            await aluno?.destroy();
+        }
+        // const alunoDisciplina = await AlunoDisciplina.findAll({
+        //     where: {
+        //         alunoId:{
+        //             [Op.eq]: alunoId
+        //         }
+        //     },
+        //     paranoid:false
+    
+        // });
 
-        res.status(200).json(aluno);
+        res.status(400).json({ error: 'Aluno ainda cadastrado em uma disciplina, não pode ser excluido' });
     } catch (error) {
         console.error('Deu erro ai tio', error);
         res.status(400).json({ error: 'Internal server error' });
