@@ -24,12 +24,14 @@ export const buscarAluno = async (req: Request, res: Response) => {
     try {
         const { alunoId } = req.params;
         
-        const aluno = await Aluno.findByPk(alunoId);
-        if (!aluno) {
-            res.status(404).json({ error: 'Aluno não encontrado' });    
+        const resultado = await pegarAluno(alunoId);
+        if (resultado.error) {
+            res.status(404).json({ error: resultado.error });    
         }
 
-        res.status(200).json(aluno);
+        const aluno = resultado.aluno;
+
+        res.status(200).json({message: resultado.menssage, aluno});
     } catch (error) {
         console.error('Deu erro ai tio', error);
         res.status(400).json({ error: 'Internal server error' });
@@ -42,13 +44,15 @@ export const atualizarAluno = async (req: Request, res: Response) => {
         const { alunoId } = req.params;
         const dadosAtualizados = req.body;
         
-        const aluno = await Aluno.findByPk(alunoId);
-        if (!aluno) {
-            res.status(404).json({ error: 'Aluno não encontrado' });    
+        const resultado = await pegarAluno(alunoId);
+        if (resultado.error) {
+            res.status(404).json({ error: resultado.error });    
         }
+        const aluno = resultado.aluno;
+
         await aluno?.update(dadosAtualizados, {fields: Object.keys(dadosAtualizados)});
 
-        res.status(200).json(aluno);
+        res.status(200).json({ message: "Aluno atualizado com sucesso", aluno});
     } catch (error) {
         console.error('Deu erro ai tio', error);
         res.status(400).json({ error: 'Internal server error' });
@@ -60,23 +64,18 @@ export const deletarAluno = async (req: Request, res: Response) => {
     try {
         const { alunoId } = req.params;
         
-        const aluno = await Aluno.findByPk(alunoId);
-        if (!aluno) {
-            res.status(404).json({ error: 'Aluno não encontrado' });    
+        const resultado = await pegarAluno(alunoId);
+        if (resultado.error) {
+            res.status(404).json({ error: resultado.error });    
         }
-        const alunoDisciplina = await AlunoDisciplina.findOne({where: {alunoId: alunoId}});
+
+        const aluno = resultado.aluno;
+        const alunoDisciplina = await AlunoDisciplina.findOne({where: {alunoId: aluno?.id}});
+        
         if (!alunoDisciplina) {
             await aluno?.destroy();
+            res.status(200).json({message: "Aluno deletado com sucesso", aluno});
         }
-        // const alunoDisciplina = await AlunoDisciplina.findAll({
-        //     where: {
-        //         alunoId:{
-        //             [Op.eq]: alunoId
-        //         }
-        //     },
-        //     paranoid:false
-    
-        // });
 
         res.status(400).json({ error: 'Aluno ainda cadastrado em uma disciplina, não pode ser excluido' });
     } catch (error) {
@@ -103,17 +102,29 @@ export const recuperarAluno = async (req: Request, res: Response) => {
     try {
         const { alunoId } = req.params;
         
-        const aluno = await Aluno.findByPk(alunoId, {
-            paranoid: false
-        });
-        if (!aluno) {
-            res.status(404).json({ error: 'Aluno não encontrado' });    
+        const resultado = await pegarAluno(alunoId);
+        if (resultado.error) {
+            res.status(404).json({ error: resultado.error });    
         }
+        const aluno = resultado.aluno;
         await aluno?.restore();
 
-        res.status(200).json(aluno);
+        res.status(200).json({menssage: resultado.menssage, aluno});
     } catch (error) {
         console.error('Deu erro ai tio', error);
         res.status(400).json({ error: 'Internal server error' });
+    }
+}
+
+export const pegarAluno = async (alunoId: string) => {
+    try {
+        const aluno = await Aluno.findByPk(alunoId, {paranoid: false});
+        if (!aluno) {
+            return { error: 'Aluno não encontrado' }; 
+        }
+        return { menssage: "Aluno encontrado com sucesso", aluno }; 
+    } catch (error) {
+        console.error('Erro ao buscar aluno', error);
+        return { error: 'Erro interno ao buscar aluno' }; 
     }
 }

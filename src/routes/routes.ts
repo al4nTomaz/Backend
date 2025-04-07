@@ -11,7 +11,7 @@ export const router = Router();
 
 router.get('/listarTodosAlunos', AlunoController.listarAlunos);
 router.post('/cadastrarAluno', AlunoController.cadastrarAluno);
-router.put('atualizarAluno/:alunoId', AlunoController.atualizarAluno);
+router.put('/atualizarAluno/:alunoId', AlunoController.atualizarAluno);
 router.delete('/deletarAluno/:alunoId', AlunoController.deletarAluno);
 router.get('/listarTodosAlunosDeletados', AlunoController.listarAlunosDeletados);
 router.put('/recuperarAluno/:alunoId', AlunoController.recuperarAluno);
