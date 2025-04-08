@@ -1,10 +1,15 @@
-CREATE database Backend;
+CREATE DATABASE IF NOT EXISTS Backend;
 
-CREATE TABLE alunos (
+USE Backend;
+
+CREATE TABLE IF NOT EXISTS alunos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    matricula VARCHAR(255) NOT NULL UNIQUE
+    matricula VARCHAR(255) NOT NULL UNIQUE,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL
 );
 
 INSERT INTO alunos (nome, email, matricula) 
@@ -15,11 +20,12 @@ VALUES
 ('Ana Costa', 'ana.costa@example.com', '2023004'),
 ('Pedro Santos', 'pedro.santos@example.com', '2023005');
 
-
-    -- createdAt TIMESTAMP NULL
-CREATE TABLE disciplinas (
+CREATE TABLE IF NOT EXISTS disciplinas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL UNIQUE
+    nome VARCHAR(255) NOT NULL UNIQUE,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL
 );
 
 INSERT INTO disciplinas (nome) 
@@ -30,12 +36,15 @@ VALUES
 ('História'),
 ('Geografia');
 
-CREATE TABLE aluno_disciplinas (
+CREATE TABLE IF NOT EXISTS aluno_disciplinas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     alunoId INT NOT NULL,
     disciplinaId INT NOT NULL,
     FOREIGN KEY (alunoId) REFERENCES alunos(id) ON DELETE CASCADE,
-    FOREIGN KEY (disciplinaId) REFERENCES disciplinas(id) ON DELETE CASCADE
+    FOREIGN KEY (disciplinaId) REFERENCES disciplinas(id) ON DELETE CASCADE,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL
 );
 
 INSERT INTO aluno_disciplinas (alunoId, disciplinaId) 

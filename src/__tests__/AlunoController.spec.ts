@@ -4,9 +4,9 @@ import server from '../server';
 describe("Teste de cadastro de Aluno", () => {
     it("Deve cadastrar um aluno na rota /cadastrarAluno", async () => {
         const novoAluno = {
-            nome: "Teste 27 Testando Silva", 
-            email: "teste27silva@email.com",
-            matricula: "1921682327"
+            nome: "Teste 274 Testando Silva", 
+            email: "teste2745silva@email.com",
+            matricula: "192168232745"
 
         };
         const response = await request(server).post("/cadastrarAluno").send(novoAluno);
@@ -32,7 +32,7 @@ describe("Teste de Listagem de Alunos", () => {
 
 describe("Teste de atualizar Aluno", () => {
     it("Deve atualizar um aluno na rota /atualizarAluno/:alunoId", async () => {
-        const alunoId = 22;
+        const alunoId = 5;
         const dadosAtualizados = {
             nome: "Kayure23 Lindu alan2 Teste 27 Testando Silva", 
             email: "alan23.teste27silva@email.com",
@@ -48,7 +48,7 @@ describe("Teste de atualizar Aluno", () => {
 
 describe("Teste de deletar Aluno", () => {
     it("Deve deletar um aluno na rota /deletarAluno/:alunoId", async () => {
-        const alunoId = 22;
+        const alunoId = 13;
     
         const response = await request(server).delete(`/deletarAluno/${alunoId}`);
 
