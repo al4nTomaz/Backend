@@ -4,9 +4,9 @@ import server from '../server';
 describe("Teste de cadastro de Aluno", () => {
     it("Deve cadastrar um aluno na rota /cadastrarAluno", async () => {
         const novoAluno = {
-            nome: "Teste 274 Testando Silva", 
-            email: "teste2745silva@email.com",
-            matricula: "192168232745"
+            nome: "aluno teste", 
+            email: "alunoteste@email.com",
+            matricula: "6"
 
         };
         const response = await request(server).post("/cadastrarAluno").send(novoAluno);
@@ -32,10 +32,10 @@ describe("Teste de Listagem de Alunos", () => {
 
 describe("Teste de atualizar Aluno", () => {
     it("Deve atualizar um aluno na rota /atualizarAluno/:alunoId", async () => {
-        const alunoId = 5;
+        const alunoId = 6;
         const dadosAtualizados = {
-            nome: "Kayure23 Lindu alan2 Teste 27 Testando Silva", 
-            email: "alan23.teste27silva@email.com",
+            nome: "aluno teste atualizado", 
+            email: "atualizado.teste@email.com",
         };
         const response = await request(server).put(`/atualizarAluno/${alunoId}`).send(dadosAtualizados);
 
@@ -48,11 +48,22 @@ describe("Teste de atualizar Aluno", () => {
 
 describe("Teste de deletar Aluno", () => {
     it("Deve deletar um aluno na rota /deletarAluno/:alunoId", async () => {
-        const alunoId = 13;
+        const alunoId = 6;
     
         const response = await request(server).delete(`/deletarAluno/${alunoId}`);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe("Aluno deletado com sucesso");
+    });
+});
+
+describe("Teste de recuperar Aluno", () => {
+    it("Deve recuperar um aluno na rota /recuperarAluno/:alunoId", async () => {
+        const alunoId = 6;
+    
+        const response = await request(server).put(`/recuperarAluno/${alunoId}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Aluno recuperado com sucesso");
     });
 });
